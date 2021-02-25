@@ -15,7 +15,7 @@ class StockEntity {
   public dailyStockPrice: number;
 
   @Column()
-  public dailyTimeStamp: Date;
+  public dailyTimestamp: Date;
 }
 
 export default StockEntity;

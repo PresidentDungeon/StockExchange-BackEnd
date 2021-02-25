@@ -6,5 +6,7 @@ export const IStockServiceProvider = 'IStockServiceProvider'
 export interface IStockService{
 
     getStock(filter: Filter): Promise<FilterList<StockEntity>>
+    getStockByName(name: String): Promise<StockEntity>
+    createStock(stock: StockEntity): Promise<boolean>
 
 }

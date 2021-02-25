@@ -9,7 +9,6 @@ export class StockController {
 
     @Post()
     GetMessages(@Body() filter: Filter): any{
-        console.log(filter);
         return this.stockService.getStock(filter);
     }
 
