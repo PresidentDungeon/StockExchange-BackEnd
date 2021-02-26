@@ -11,10 +11,10 @@ class StockEntity {
   @Column()
   public description: string;
 
-  @Column("decimal", { precision: 5, scale: 2 })
+  @Column("decimal", { precision: 8, scale: 2 })
   public currentStockPrice: number;
 
-  @Column("decimal", { precision: 5, scale: 2 })
+  @Column("decimal", { precision: 8, scale: 2 })
   public dailyStockPrice: number;
 
   @Column()

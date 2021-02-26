@@ -36,7 +36,7 @@ export class StockService implements IStockService{
             return true;
         }
         catch (e) {
-
+            console.log(e);
             return false;
         }
     }
