@@ -75,4 +75,22 @@ export class StockService implements IStockService{
         return stockEntity;
     }
 
+    async verifyStock(): Promise<boolean> {
+
+        const date: Date = new Date()
+        date.setHours(0); date.setMinutes(0); date.setSeconds(0); date.setMilliseconds(0);
+
+        const result = await this.stockRepository.createQueryBuilder().update(StockEntity)
+            .set({
+                dailyStockPrice: () => '"currentStockPrice"',
+                dailyTimestamp: new Date()})
+            .where(`"dailyTimestamp" < '${date.toDateString()}'`)
+            .execute();
+
+        if(result.affected){
+            return true;
+        }
+        return false;
+    }
+
 }

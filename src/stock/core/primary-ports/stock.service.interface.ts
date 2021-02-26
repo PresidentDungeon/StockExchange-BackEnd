@@ -11,5 +11,6 @@ export interface IStockService{
     createStock(stock: StockEntity): Promise<boolean>
     updateStock(stock: StockEntity): Promise<boolean>
     deleteStock(stock: StockEntity): Promise<boolean>
+    verifyStock(): Promise<boolean>
 
 }

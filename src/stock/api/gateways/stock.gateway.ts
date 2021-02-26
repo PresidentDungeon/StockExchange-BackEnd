@@ -31,7 +31,6 @@ export class StockGateway {
     }
   }
 
-
   @SubscribeMessage('updateStock')
   async handleUpdateEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
 
@@ -68,6 +67,21 @@ export class StockGateway {
     } else {
       client.emit('deleteResponse', {deleted: false, errorMessage: 'Error updating stock in database'})
     }
+  }
+
+  @SubscribeMessage('verifyStockInitial')
+  async handleVerifyInitialEvent(@ConnectedSocket() client: Socket) {
+    let updated: boolean = await this.stockService.verifyStock();
+    if(updated){this.server.emit("stockDailyUpdate");}
+    else{client.emit("stockCreateChanged");}
+  }
+
+  handleConnection(client: Socket, ...args: any[]): any {
+    console.log("connected:" + client.id);
+  }
+
+  handleDisconnect(client: Socket): any {
+    console.log("disconnected:" + client.id);
   }
 
 }

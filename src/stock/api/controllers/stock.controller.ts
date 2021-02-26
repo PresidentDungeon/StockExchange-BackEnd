@@ -1,4 +1,4 @@
-import {Body, Controller, Inject, Post} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Post} from '@nestjs/common';
 import {IStockService, IStockServiceProvider} from "../../core/primary-ports/stock.service.interface";
 import {Filter} from "../../core/models/filter";
 
@@ -11,5 +11,4 @@ export class StockController {
     GetMessages(@Body() filter: Filter): any{
         return this.stockService.getStock(filter);
     }
-
 }
