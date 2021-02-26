@@ -51,6 +51,23 @@ export class StockGateway {
     }
   }
 
+  @SubscribeMessage('deleteStock')
+  async handleDeleteEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
 
+    let existingStock: StockEntity = await this.stockService.getStockByID(stock.id);
+
+    if (existingStock) {
+
+      let result: boolean = await this.stockService.deleteStock(stock);
+      if (result) {
+        this.server.emit('stockDeleteChanged', stock);
+        client.emit('deleteResponse', {deleted: true, errorMessage: ''});
+      } else {
+        client.emit('deleteResponse', {deleted: false, errorMessage: 'Stock could not be found in database'})
+      }
+    } else {
+      client.emit('deleteResponse', {deleted: false, errorMessage: 'Error updating stock in database'})
+    }
+  }
 
 }

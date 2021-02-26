@@ -54,6 +54,17 @@ export class StockService implements IStockService{
         }
     }
 
+    async deleteStock(stock: StockEntity): Promise<boolean> {
+        try{
+            const deleteResponse = await this.stockRepository.delete(stock.id);
+            if(deleteResponse.affected){return true;}
+            return false;
+        }
+        catch (e) {
+            return false;
+        }
+    }
+
     async getStockByName(name: String): Promise<StockEntity> {
         const stockEntity: StockEntity = await this.stockRepository.findOne({ where: `"name" ILIKE '${name}'`});
         return stockEntity;

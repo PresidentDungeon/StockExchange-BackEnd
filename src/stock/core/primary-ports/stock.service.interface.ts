@@ -10,5 +10,6 @@ export interface IStockService{
     getStockByID(id: number): Promise<StockEntity>
     createStock(stock: StockEntity): Promise<boolean>
     updateStock(stock: StockEntity): Promise<boolean>
+    deleteStock(stock: StockEntity): Promise<boolean>
 
 }
