@@ -1,6 +1,8 @@
-import {Body, Controller, Get, Inject, Post} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Post, Query} from '@nestjs/common';
 import {IStockService, IStockServiceProvider} from "../../core/primary-ports/stock.service.interface";
 import {Filter} from "../../core/models/filter";
+import {Stock} from "../../core/models/stock";
+import StockEntity from "../../../entities/stock.entity";
 
 @Controller('stock')
 export class StockController {
@@ -10,5 +12,11 @@ export class StockController {
     @Post()
     GetMessages(@Body() filter: Filter): any{
         return this.stockService.getStock(filter);
+    }
+
+    @Get()
+    GetStockByID(@Query() ID?: any): any{
+        const stock = this.stockService.getStockByID(ID.ID);
+        return stock;
     }
 }

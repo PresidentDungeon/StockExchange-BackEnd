@@ -3,14 +3,17 @@ import {Inject} from "@nestjs/common";
 import {IStockService, IStockServiceProvider} from "../../core/primary-ports/stock.service.interface";
 import StockEntity from "../../../entities/stock.entity";
 import {Socket} from "socket.io";
-import {Stock} from "../../core/models/stock";
+import {interval, Subscription} from "rxjs";
 
 @WebSocketGateway()
 export class StockGateway {
 
   @WebSocketServer() server;
+  stockupdateCheck: Subscription;
 
   constructor(@Inject(IStockServiceProvider) private stockService: IStockService) {
+    const source = interval(300000);
+    this.stockupdateCheck = source.subscribe(val => this.verifyStockDate());
   }
 
   @SubscribeMessage('createStock')
@@ -50,6 +53,7 @@ export class StockGateway {
     }
   }
 
+
   @SubscribeMessage('deleteStock')
   async handleDeleteEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
 
@@ -76,12 +80,16 @@ export class StockGateway {
     else{client.emit("stockCreateChanged");}
   }
 
+  async verifyStockDate() {
+    let updated: boolean = await this.stockService.verifyStock();
+    if(updated){this.server.emit("stockDailyUpdate");}
+  }
+
+
   handleConnection(client: Socket, ...args: any[]): any {
-    console.log("connected:" + client.id);
   }
 
   handleDisconnect(client: Socket): any {
-    console.log("disconnected:" + client.id);
   }
 
 }
