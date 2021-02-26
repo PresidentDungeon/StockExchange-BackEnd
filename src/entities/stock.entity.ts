@@ -9,6 +9,9 @@ class StockEntity {
   public name: string;
 
   @Column()
+  public description: string;
+
+  @Column()
   public currentStockPrice: number;
 
   @Column()

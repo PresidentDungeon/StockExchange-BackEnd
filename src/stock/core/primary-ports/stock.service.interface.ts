@@ -7,6 +7,8 @@ export interface IStockService{
 
     getStock(filter: Filter): Promise<FilterList<StockEntity>>
     getStockByName(name: String): Promise<StockEntity>
+    getStockByID(id: number): Promise<StockEntity>
     createStock(stock: StockEntity): Promise<boolean>
+    updateStock(stock: StockEntity): Promise<boolean>
 
 }

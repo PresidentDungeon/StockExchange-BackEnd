@@ -22,10 +22,8 @@ export class StockGateway {
     } else {
       let result: boolean = await this.stockService.createStock(stock);
 
-      console.log(result);
-
       if (result) {
-        this.server.emit('stockChanged');
+        this.server.emit('stockCreateChanged', 0);
         client.emit('createResponse', {created: true, errorMessage: ''});
       } else {
         client.emit('createResponse', {created: false, errorMessage: 'Error saving stock to database'})
@@ -33,6 +31,25 @@ export class StockGateway {
     }
   }
 
+
+  @SubscribeMessage('updateStock')
+  async handleUpdateEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
+
+    let existingStock: StockEntity = await this.stockService.getStockByID(stock.id);
+
+    if (existingStock) {
+
+      let result: boolean = await this.stockService.updateStock(stock);
+      if (result) {
+        this.server.emit('stockUpdateChanged', stock);
+        client.emit('updateResponse', {updated: true, errorMessage: ''});
+      } else {
+        client.emit('updateResponse', {updated: false, errorMessage: 'Stock could not be found in database'})
+      }
+    } else {
+      client.emit('updateResponse', {updated: false, errorMessage: 'Error updating stock in database'})
+    }
+  }
 
 
 

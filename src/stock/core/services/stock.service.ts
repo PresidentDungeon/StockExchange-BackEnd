@@ -41,8 +41,26 @@ export class StockService implements IStockService{
         }
     }
 
+    async updateStock(stock: StockEntity): Promise<boolean> {
+        try{
+            await this.stockRepository.update(stock.id, stock);
+            const updatedStock = await this.stockRepository.findOne(stock.id);
+            if (updatedStock) {
+                return true
+            }
+        }
+        catch (e) {
+            return false;
+        }
+    }
+
     async getStockByName(name: String): Promise<StockEntity> {
         const stockEntity: StockEntity = await this.stockRepository.findOne({ where: `"name" ILIKE '${name}'`});
+        return stockEntity;
+    }
+
+    async getStockByID(id: number): Promise<StockEntity> {
+        const stockEntity: StockEntity = await this.stockRepository.findOne(id);
         return stockEntity;
     }
 
