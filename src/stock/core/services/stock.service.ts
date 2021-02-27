@@ -48,6 +48,7 @@ export class StockService implements IStockService{
             if (updatedStock) {
                 return true
             }
+            return false;
         }
         catch (e) {
             return false;

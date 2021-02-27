@@ -43,13 +43,13 @@ export class StockGateway {
 
       let result: boolean = await this.stockService.updateStock(stock);
       if (result) {
-        this.server.emit('stockUpdateChanged', stock);
-        client.emit('updateResponse', {updated: true, errorMessage: ''});
+        client.broadcast.emit('stockUpdateChanged', stock);
+        client.emit('updateResponse', {updated: true, errorMessage: '', stock: stock});
       } else {
-        client.emit('updateResponse', {updated: false, errorMessage: 'Stock could not be found in database'})
+        client.emit('updateResponse', {updated: false, errorMessage: 'Error updating stock in database'})
       }
     } else {
-      client.emit('updateResponse', {updated: false, errorMessage: 'Error updating stock in database'})
+      client.emit('updateResponse', {updated: false, errorMessage: 'Stock could not be found in database'})
     }
   }
 
@@ -63,8 +63,8 @@ export class StockGateway {
 
       let result: boolean = await this.stockService.deleteStock(stock);
       if (result) {
-        this.server.emit('stockDeleteChanged', stock);
-        client.emit('deleteResponse', {deleted: true, errorMessage: ''});
+        client.broadcast.emit('stockDeleteChanged', stock);
+        client.emit('deleteResponse', {deleted: true, errorMessage: '', stock: stock});
       } else {
         client.emit('deleteResponse', {deleted: false, errorMessage: 'Stock could not be found in database'})
       }
