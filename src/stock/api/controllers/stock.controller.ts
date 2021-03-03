@@ -1,8 +1,6 @@
 import {Body, Controller, Get, Inject, Post, Query} from '@nestjs/common';
 import {IStockService, IStockServiceProvider} from "../../core/primary-ports/stock.service.interface";
 import {Filter} from "../../core/models/filter";
-import {Stock} from "../../core/models/stock";
-import StockEntity from "../../../entities/stock.entity";
 
 @Controller('stock')
 export class StockController {

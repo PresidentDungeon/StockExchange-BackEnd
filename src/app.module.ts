@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { StockModule } from './stock/api/stock.module';
 import { ConfigModule } from "@nestjs/config";
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from './stock/infrastructure/data-source/postgres/database.module';
 import { StockController } from './stock/api/controllers/stock.controller';
 import * as Joi from '@hapi/joi';
 

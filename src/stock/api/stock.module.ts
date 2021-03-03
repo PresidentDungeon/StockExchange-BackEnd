@@ -3,7 +3,7 @@ import {IStockServiceProvider} from "../core/primary-ports/stock.service.interfa
 import {StockService} from "../core/services/stock.service";
 import { StockGateway } from './gateways/stock.gateway';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import StockEntity from "../../entities/stock.entity";
+import StockEntity from "../infrastructure/data-source/entities/stock.entity";
 import {StockController} from "./controllers/stock.controller";
 
 @Module({
