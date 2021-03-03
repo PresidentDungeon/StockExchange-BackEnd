@@ -17,72 +17,72 @@ export class StockGateway {
   }
 
   @SubscribeMessage('createStock')
-  async handleRegisterEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
+  handleRegisterEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
 
-    let existingStock: StockEntity = await this.stockService.getStockByName(stock.name);
-    if (existingStock) {
-      client.emit('createResponse', {created: false, errorMessage: 'Stock with same name already exists'});
-    } else {
-      let result: boolean = await this.stockService.createStock(stock);
-
-      if (result) {
-        this.server.emit('stockCreateChanged', 0);
-        client.emit('createResponse', {created: true, errorMessage: ''});
-      } else {
-        client.emit('createResponse', {created: false, errorMessage: 'Error saving stock to database'})
+    this.stockService.getStockByName(stock.name).then((existingStock) => {
+      if (existingStock)
+      {
+        client.emit('createResponse', {created: false, errorMessage: 'Stock with same name already exists'});
       }
-    }
+      else{
+        this.stockService.createStock(stock).then((result) => {
+          if (result) {this.server.emit('stockCreateChanged', 0); client.emit('createResponse', {created: true, errorMessage: ''});}
+          else {client.emit('createResponse', {created: false, errorMessage: 'Error saving stock to database'})}
+        })
+      }
+    })
   }
 
   @SubscribeMessage('updateStock')
-  async handleUpdateEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
+  handleUpdateEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
 
-    let existingStock: StockEntity = await this.stockService.getStockByID(stock.id);
-
-    if (existingStock) {
-
-      let result: boolean = await this.stockService.updateStock(stock);
-      if (result) {
-        client.broadcast.emit('stockUpdateChanged', stock);
-        client.emit('updateResponse', {updated: true, errorMessage: '', stock: stock});
-      } else {
-        client.emit('updateResponse', {updated: false, errorMessage: 'Error updating stock in database'})
+    this.stockService.getStockByID(stock.id).then((existingStock) => {
+      if (existingStock) {
+        this.stockService.updateStock(stock).then((result) => {
+          if (result) {
+            client.broadcast.emit('stockUpdateChanged', stock);
+            client.emit('updateResponse', {updated: true, errorMessage: '', stock: stock});
+          } else {
+            client.emit('updateResponse', {updated: false, errorMessage: 'Error updating stock in database'})
+          }
+        })}
+      else {
+        client.emit('updateResponse', {updated: false, errorMessage: 'Stock could not be found in database'})
       }
-    } else {
-      client.emit('updateResponse', {updated: false, errorMessage: 'Stock could not be found in database'})
-    }
+    })
   }
 
 
   @SubscribeMessage('deleteStock')
-  async handleDeleteEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
+  handleDeleteEvent(@MessageBody() stock: StockEntity, @ConnectedSocket() client: Socket) {
 
-    let existingStock: StockEntity = await this.stockService.getStockByID(stock.id);
-
-    if (existingStock) {
-
-      let result: boolean = await this.stockService.deleteStock(stock);
-      if (result) {
-        client.broadcast.emit('stockDeleteChanged', stock);
-        client.emit('deleteResponse', {deleted: true, errorMessage: '', stock: stock});
+    this.stockService.getStockByID(stock.id).then((existingStock) => {
+      if (existingStock) {
+        this.stockService.deleteStock(stock).then((result) => {
+          if (result) {
+            client.broadcast.emit('stockDeleteChanged', stock);
+            client.emit('deleteResponse', {deleted: true, errorMessage: '', stock: stock});
+          } else {
+            client.emit('deleteResponse', {deleted: false, errorMessage: 'Stock could not be found in database'})
+          }})
       } else {
-        client.emit('deleteResponse', {deleted: false, errorMessage: 'Stock could not be found in database'})
+        client.emit('deleteResponse', {deleted: false, errorMessage: 'Error updating stock in database'})
       }
-    } else {
-      client.emit('deleteResponse', {deleted: false, errorMessage: 'Error updating stock in database'})
-    }
+    })
   }
 
   @SubscribeMessage('verifyStockInitial')
-  async handleVerifyInitialEvent(@ConnectedSocket() client: Socket) {
-    let updated: boolean = await this.stockService.verifyStock();
-    if(updated){this.server.emit("stockDailyUpdate");}
-    else{client.emit("stockCreateChanged");}
+  handleVerifyInitialEvent(@ConnectedSocket() client: Socket) {
+    this.stockService.verifyStock().then((updated) => {
+      if(updated){this.server.emit("stockDailyUpdate");}
+      else{client.emit("stockCreateChanged");}
+    })
   }
 
-  async verifyStockDate() {
-    let updated: boolean = await this.stockService.verifyStock();
-    if(updated){this.server.emit("stockDailyUpdate");}
+  verifyStockDate() {
+    this.stockService.verifyStock().then((updated) => {
+      if(updated){this.server.emit("stockDailyUpdate");}
+    })
   }
 
 
