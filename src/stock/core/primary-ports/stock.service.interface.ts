@@ -1,6 +1,6 @@
 import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
-import StockEntity from "../../infrastructure/data-source/entities/stock.entity";
+import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
 
 export const IStockServiceProvider = 'IStockServiceProvider'
 export interface IStockService{

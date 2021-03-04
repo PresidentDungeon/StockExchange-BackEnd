@@ -1,7 +1,7 @@
 import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-class StockEntity {
+export class StockEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -20,5 +20,3 @@ class StockEntity {
   @Column()
   public dailyTimestamp: Date;
 }
-
-export default StockEntity;

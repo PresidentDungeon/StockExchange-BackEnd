@@ -1,9 +1,9 @@
 import {ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer} from '@nestjs/websockets';
 import {Inject} from "@nestjs/common";
 import {IStockService, IStockServiceProvider} from "../../core/primary-ports/stock.service.interface";
-import StockEntity from "../../infrastructure/data-source/entities/stock.entity";
 import {Socket} from "socket.io";
 import {interval, Subscription} from "rxjs";
+import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
 
 @WebSocketGateway()
 export class StockGateway {
@@ -76,8 +76,8 @@ export class StockGateway {
   @SubscribeMessage('verifyStockInitial')
   async handleVerifyInitialEvent(@ConnectedSocket() client: Socket) {
     let updated: boolean = await this.stockService.verifyStock();
-    if(updated){this.server.emit("stockDailyUpdate");}
-    else{client.emit("stockCreateChanged");}
+    if(updated){client.broadcast.emit("stockDailyUpdate");}
+    {client.emit("stockCreateChanged");}
   }
 
   async verifyStockDate() {

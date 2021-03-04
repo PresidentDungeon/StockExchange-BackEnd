@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import {IStockService} from "../primary-ports/stock.service.interface";
-import {Stock} from "../models/stock";
 import {InjectRepository} from "@nestjs/typeorm";
-import StockEntity from "../../infrastructure/data-source/entities/stock.entity";
 import {Repository} from "typeorm";
 import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
+import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
 
 @Injectable()
 export class StockService implements IStockService{
