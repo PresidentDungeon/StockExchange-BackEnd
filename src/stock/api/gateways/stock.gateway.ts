@@ -74,8 +74,8 @@ export class StockGateway {
   @SubscribeMessage('verifyStockInitial')
   handleVerifyInitialEvent(@ConnectedSocket() client: Socket) {
     this.stockService.verifyStock().then((updated) => {
-      if(updated){client.broadcast.emit("stockDailyUpdate");}
-      {client.emit("stockCreateChanged");}
+      if(updated){this.server.emit("stockDailyUpdate");}
+      else{client.emit("stockCreateChanged");}
     })
   }
 
