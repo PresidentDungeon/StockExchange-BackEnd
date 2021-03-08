@@ -23,12 +23,13 @@ export class StockGateway {
     if (existingStock) {
       client.emit('createResponse', {created: false, errorMessage: 'Stock with same name already exists'});
     } else {
-      let result: boolean = await this.stockService.createStock(stock);
 
-      if (result) {
+      try{
+        await this.stockService.createStock(stock);
         this.server.emit('stockCreateChanged', 0);
         client.emit('createResponse', {created: true, errorMessage: ''});
-      } else {
+      }
+      catch (e){
         client.emit('createResponse', {created: false, errorMessage: 'Error saving stock to database'})
       }
     }
@@ -40,12 +41,12 @@ export class StockGateway {
     let existingStock: StockEntity = await this.stockService.getStockByID(stock.id);
 
     if (existingStock) {
-
-      let result: boolean = await this.stockService.updateStock(stock);
-      if (result) {
+      try{
+        await this.stockService.updateStock(stock);
         client.broadcast.emit('stockUpdateChanged', stock);
         client.emit('updateResponse', {updated: true, errorMessage: '', stock: stock});
-      } else {
+      }
+      catch (e){
         client.emit('updateResponse', {updated: false, errorMessage: 'Error updating stock in database'})
       }
     } else {
@@ -60,12 +61,12 @@ export class StockGateway {
     let existingStock: StockEntity = await this.stockService.getStockByID(stock.id);
 
     if (existingStock) {
-
-      let result: boolean = await this.stockService.deleteStock(stock);
-      if (result) {
+      try{
+        await this.stockService.deleteStock(stock);
         client.broadcast.emit('stockDeleteChanged', stock);
         client.emit('deleteResponse', {deleted: true, errorMessage: '', stock: stock});
-      } else {
+      }
+      catch (e) {
         client.emit('deleteResponse', {deleted: false, errorMessage: 'Stock could not be found in database'})
       }
     } else {

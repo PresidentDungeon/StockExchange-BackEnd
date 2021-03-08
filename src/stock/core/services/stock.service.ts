@@ -29,40 +29,21 @@ export class StockService implements IStockService{
     }
 
     async createStock(stock: StockEntity): Promise<boolean> {
-        try{
-            const newStock = await this.stockRepository.create(stock);
-            await this.stockRepository.save(newStock);
-            return true;
-        }
-        catch (e) {
-            console.log(e);
-            return false;
-        }
+        const newStock = await this.stockRepository.create(stock);
+        await this.stockRepository.save(newStock);
+        return true;
     }
 
     async updateStock(stock: StockEntity): Promise<boolean> {
-        try{
-            await this.stockRepository.update(stock.id, stock);
-            const updatedStock = await this.stockRepository.findOne(stock.id);
-            if (updatedStock) {
-                return true
-            }
-            return false;
-        }
-        catch (e) {
-            return false;
-        }
+        await this.stockRepository.update(stock.id, stock);
+        const updatedStock = await this.stockRepository.findOne(stock.id);
+        return true;
     }
 
     async deleteStock(stock: StockEntity): Promise<boolean> {
-        try{
-            const deleteResponse = await this.stockRepository.delete(stock.id);
-            if(deleteResponse.affected){return true;}
-            return false;
-        }
-        catch (e) {
-            return false;
-        }
+        const deleteResponse = await this.stockRepository.delete(stock.id);
+        if(deleteResponse.affected){return true;}
+        return true;
     }
 
     async getStockByName(name: String): Promise<StockEntity> {
