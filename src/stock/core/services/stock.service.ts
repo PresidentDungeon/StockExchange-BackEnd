@@ -36,14 +36,13 @@ export class StockService implements IStockService{
 
     async updateStock(stock: StockEntity): Promise<boolean> {
         await this.stockRepository.update(stock.id, stock);
-        const updatedStock = await this.stockRepository.findOne(stock.id);
         return true;
     }
 
     async deleteStock(stock: StockEntity): Promise<boolean> {
         const deleteResponse = await this.stockRepository.delete(stock.id);
         if(deleteResponse.affected){return true;}
-        return true;
+        throw new Error('Stock could not be found or deleted');
     }
 
     async getStockByName(name: String): Promise<StockEntity> {
