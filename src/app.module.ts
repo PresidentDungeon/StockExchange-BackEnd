@@ -17,7 +17,7 @@ import * as Joi from '@hapi/joi';
       POSTGRES_DB: Joi.string().required(),
       PORT: Joi.number(),
     })
-  }), DatabaseModule, DatabaseMongoModule
+  }), DatabaseModule
   ],
   controllers: [StockController],
   providers: []
