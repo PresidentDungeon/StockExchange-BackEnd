@@ -17,7 +17,7 @@ import * as Joi from '@hapi/joi';
     })
   }), DatabaseModule
   ],
-  controllers: [StockController],
+  controllers: [],
   providers: []
 })
 

@@ -9,7 +9,7 @@ import {StockEntity} from "../infrastructure/data-source/entities/stock.entity";
 @Module({
     imports: [TypeOrmModule.forFeature([StockEntity])],
     providers: [StockGateway, {provide: IStockServiceProvider, useClass: StockService}],
-    exports: [IStockServiceProvider],
+    exports: [],
     controllers: [StockController]
 })
 export class StockModule {}

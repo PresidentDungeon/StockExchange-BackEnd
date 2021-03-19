@@ -26,7 +26,7 @@ export class StockGateway {
 
       try{
         await this.stockService.createStock(stock);
-        this.server.emit('stockCreateChanged', 0);
+        this.server.emit('stockCreateChanged');
         client.emit('createResponse', {created: true, errorMessage: ''});
       }
       catch (e){
