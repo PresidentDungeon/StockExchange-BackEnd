@@ -11,7 +11,7 @@ import {StockMongoService} from "../core/services/stock-mongo.service";
 
 @Module({
     imports: [TypeOrmModule.forFeature([StockEntity]), DatabaseMongoModule],
-    providers: [StockGateway, {provide: IStockServiceProvider, useClass: StockMongoService}, ...stocksProviders],
+    providers: [StockGateway, {provide: IStockServiceProvider, useClass: StockService}, ...stocksProviders],
     exports: [IStockServiceProvider],
     controllers: [StockController]
 })

@@ -62,7 +62,7 @@ export class StockMongoService implements IStockService {
 
         let stocks = await this.stockModel.find({ dailyTimestamp: {$lt: date}}).exec()
         stocks.forEach((stock) => {stock.dailyStockPrice = stock.currentStockPrice; stock.dailyTimestamp = new Date(); this.updateStock(stock);})
-        
+
         return stocks.length > 0
     }
 }
