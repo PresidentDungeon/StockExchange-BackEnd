@@ -8,6 +8,7 @@ import {StockEntity} from "../../infrastructure/data-source/entities/stock.entit
 import {Document, Model} from "mongoose";
 import {StockInterface} from "../../infrastructure/data-source/mongoDB/stockInterface";
 import {Stock} from "../models/stock";
+import {v4 as uuidv4} from 'uuid';
 
 
 @Injectable()
@@ -18,7 +19,16 @@ export class StockService implements IStockService{
         private stockRepository: Repository<StockEntity>
     ) {}
 
-    async getStock(filter: Filter): Promise<FilterList<StockEntity>>{
+    async createStock(stock: Stock): Promise<boolean> {
+
+        stock.id = uuidv4();
+
+        const newStock = await this.stockRepository.create(stock);
+        await this.stockRepository.save(newStock);
+        return true;
+    }
+
+    async getStock(filter: Filter): Promise<FilterList<Stock>>{
 
         const [result, total] = await this.stockRepository.findAndCount(
             {
@@ -28,14 +38,18 @@ export class StockService implements IStockService{
             }
         );
 
-        var stock: FilterList<StockEntity> = {totalItems: total, list: result}
+        let stock: FilterList<StockEntity> = {totalItems: total, list: result}
         return stock;
     }
 
-    async createStock(stock: StockEntity): Promise<boolean> {
-        const newStock = await this.stockRepository.create(stock);
-        await this.stockRepository.save(newStock);
-        return true;
+    async getStockByName(name: String): Promise<StockEntity> {
+        const stockEntity: StockEntity = await this.stockRepository.findOne({ where: `"name" ILIKE '${name}'`});
+        return stockEntity;
+    }
+
+    async getStockByID(id: string): Promise<StockEntity> {
+        const stockEntity: StockEntity = await this.stockRepository.findOne(id);
+        return stockEntity;
     }
 
     async updateStock(stock: StockEntity): Promise<boolean> {
@@ -47,16 +61,6 @@ export class StockService implements IStockService{
         const deleteResponse = await this.stockRepository.delete(stock.id);
         if(deleteResponse.affected){return true;}
         throw new Error('Stock could not be found or deleted');
-    }
-
-    async getStockByName(name: String): Promise<StockEntity> {
-        const stockEntity: StockEntity = await this.stockRepository.findOne({ where: `"name" ILIKE '${name}'`});
-        return stockEntity;
-    }
-
-    async getStockByID(id: number): Promise<StockEntity> {
-        const stockEntity: StockEntity = await this.stockRepository.findOne(id);
-        return stockEntity;
     }
 
     async verifyStock(): Promise<boolean> {

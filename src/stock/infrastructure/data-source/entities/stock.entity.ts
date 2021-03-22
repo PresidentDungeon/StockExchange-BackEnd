@@ -1,9 +1,9 @@
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {Column, Entity, Index, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class StockEntity {
-  @PrimaryGeneratedColumn()
-  public id: number;
+  @PrimaryColumn()
+  public id: string;
 
   @Column()
   public name: string;
