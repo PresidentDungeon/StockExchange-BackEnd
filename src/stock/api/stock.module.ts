@@ -13,7 +13,7 @@ import {IStockRepositoryProvider} from "../core/primary-ports/stock.repository.i
 
 @Module({
     imports: [TypeOrmModule.forFeature([StockEntity]), DatabaseMongoModule],
-    providers: [StockGateway, {provide: IStockServiceProvider, useClass: StockMongoService}, {provide: IStockRepositoryProvider, useClass: StockRepository}, ...stocksProviders],
+    providers: [StockGateway, {provide: IStockServiceProvider, useClass: StockService}, {provide: IStockRepositoryProvider, useClass: StockRepository}, ...stocksProviders],
     exports: [IStockServiceProvider],
     controllers: [StockController]
 })

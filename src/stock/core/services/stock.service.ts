@@ -31,7 +31,7 @@ export class StockService implements IStockService{
 
         const [result, total] = await this.stockRepository.findAndCount(
             {
-                where: {}, order: { name: "DESC" },
+                where: {}, order: { name: "ASC" },
                 take: filter.itemsPrPage,
                 skip: (filter.currentPage - 1) * filter.itemsPrPage
             }
@@ -92,11 +92,11 @@ export class StockService implements IStockService{
     verifyStockEntity(stock: Stock): void{
 
         if (stock.name.length < 2) {
-            throw new Error('Stock name must be more than 2 chars');
+            throw new Error('Stock name must be more than 2 characters');
         }
 
         if (stock.name.length > 16) {
-            throw new Error('Stock name must be less than 16 chars');
+            throw new Error('Stock name must be less than 16 characters');
         }
 
         if(stock.currentStockPrice < 0){
@@ -108,11 +108,11 @@ export class StockService implements IStockService{
         }
 
         if(stock.description.length < 1){
-            throw new Error('Stock description must be more than 0 chars');
+            throw new Error('Stock description must be more than 0 characters');
         }
 
         if(stock.description.length > 600){
-            throw new Error('Stock description must be under 600 chars');
+            throw new Error('Stock description must be under 600 characters');
         }
     }
 

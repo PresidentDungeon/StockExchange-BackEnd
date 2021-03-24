@@ -2,9 +2,6 @@ import { Module } from '@nestjs/common';
 import { StockModule } from './stock/api/stock.module';
 import { ConfigModule } from "@nestjs/config";
 import { DatabaseModule } from './stock/infrastructure/data-source/postgres/database.module';
-import { StockController } from './stock/api/controllers/stock.controller';
-import { DatabaseMongoModule } from './stock/infrastructure/data-source/mongoDB/database-mongo.module';
-import { StockMongoService } from './stock/core/services/stock-mongo.service';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -19,7 +16,7 @@ import * as Joi from '@hapi/joi';
     })
   }), DatabaseModule
   ],
-  controllers: [StockController],
+  controllers: [],
   providers: []
 })
 

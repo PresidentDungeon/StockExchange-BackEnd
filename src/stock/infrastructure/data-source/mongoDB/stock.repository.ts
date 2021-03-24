@@ -26,7 +26,7 @@ export class StockRepository implements IStockRepository {
 
         const totalItems = await this.stockModel.find().countDocuments().exec()
         const result = await this.stockModel.find().limit(filter.itemsPrPage).
-        skip((filter.currentPage - 1) * filter.itemsPrPage).sort({name: 'desc'}).exec()
+        skip((filter.currentPage - 1) * filter.itemsPrPage).sort({name: 'ASC'}).exec()
         let filterStock: FilterList<Stock> = {totalItems: totalItems, list: result}
         return filterStock;
     }
@@ -65,5 +65,4 @@ export class StockRepository implements IStockRepository {
 
         return stocks.length > 0
     }
-
 }
