@@ -4,7 +4,7 @@ import {StockInterface} from "./stockInterface";
 import {Stock} from "../../../core/models/stock";
 import {Filter} from "../../../core/models/filter";
 import {FilterList} from "../../../core/models/filterList";
-import {StockEntity} from "../entities/stock.entity";
+import {StockEntity} from "../postgres/entities/stock.entity";
 import {v4 as uuidv4} from 'uuid';
 
 @Injectable()

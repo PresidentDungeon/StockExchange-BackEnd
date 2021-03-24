@@ -3,7 +3,7 @@ import {Inject} from "@nestjs/common";
 import {IStockService, IStockServiceProvider} from "../../core/primary-ports/stock.service.interface";
 import {Socket} from "socket.io";
 import {interval, Subscription} from "rxjs";
-import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
+import {StockEntity} from "../../infrastructure/data-source/postgres/entities/stock.entity";
 
 @WebSocketGateway()
 export class StockGateway {

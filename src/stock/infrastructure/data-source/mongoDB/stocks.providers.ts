@@ -1,5 +1,5 @@
 import { Connection } from 'mongoose';
-import {StockSchema} from "../entities/stock.schemas";
+import {StockSchema} from "./stock.schemas";
 
 export const stocksProviders = [
     {

@@ -6,8 +6,7 @@ import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
 import {Stock} from "../models/stock";
 import {v4 as uuidv4} from 'uuid';
-import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
-
+import {StockEntity} from "../../infrastructure/data-source/postgres/entities/stock.entity";
 
 @Injectable()
 export class StockService implements IStockService{

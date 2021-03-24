@@ -3,7 +3,7 @@ import {IStockService} from "../primary-ports/stock.service.interface";
 import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
 import {Stock} from "../models/stock";
-import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
+import {StockEntity} from "../../infrastructure/data-source/postgres/entities/stock.entity";
 import {StockRepository} from "../../infrastructure/data-source/mongoDB/stock.repository";
 
 @Injectable()
