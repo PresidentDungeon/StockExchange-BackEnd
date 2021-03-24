@@ -1,7 +1,8 @@
-import {Column, Entity, Index, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, PrimaryColumn} from "typeorm";
 
 @Entity()
 export class StockEntity {
+
   @PrimaryColumn()
   public id: string;
 

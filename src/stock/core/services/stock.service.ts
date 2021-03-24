@@ -1,11 +1,9 @@
-import {Inject, Injectable} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {IStockService} from "../primary-ports/stock.service.interface";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
-import {Document, Model} from "mongoose";
-import {StockInterface} from "../../infrastructure/data-source/mongoDB/stockInterface";
 import {Stock} from "../models/stock";
 import {v4 as uuidv4} from 'uuid';
 import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
@@ -21,13 +19,7 @@ export class StockService implements IStockService{
 
     async createStock(stock: Stock): Promise<boolean> {
 
-        if (stock.name.length < 2) {
-            throw new Error('Stock name must be more then 2 chars');
-        }
-
-        if(stock.currentStockPrice < 0){
-            throw new Error('Stock price must be 0 or above')
-        }
+        this.verifyStockEntity(stock);
 
         stock.id = uuidv4();
 
@@ -46,29 +38,23 @@ export class StockService implements IStockService{
             }
         );
 
-        let stock: FilterList<StockEntity> = {totalItems: total, list: result}
+        let stock: FilterList<Stock> = {totalItems: total, list: result}
         return stock;
     }
 
-    async getStockByName(name: String): Promise<StockEntity> {
-        const stockEntity: StockEntity = await this.stockRepository.findOne({ where: `"name" ILIKE '${name}'`});
+    async getStockByName(name: String): Promise<Stock> {
+        const stockEntity: Stock = await this.stockRepository.findOne({ where: `"name" ILIKE '${name}'`});
         return stockEntity;
     }
 
-    async getStockByID(id: string): Promise<StockEntity> {
-        const stockEntity: StockEntity = await this.stockRepository.findOne(id);
-        return stockEntity;
+    async getStockByID(id: string): Promise<Stock> {
+        const stock: Stock = await this.stockRepository.findOne(id);
+        return stock;
     }
 
-    async updateStock(stock: StockEntity): Promise<boolean> {
+    async updateStock(stock: Stock): Promise<boolean> {
 
-        if (stock.name.length < 2) {
-            throw new Error('Stock name must be more then 2 chars');
-        }
-
-        if(stock.currentStockPrice < 0){
-            throw new Error('Stock price must be 0 or above')
-        }
+        this.verifyStockEntity(stock);
 
         try{
             await this.stockRepository.update(stock.id, stock);
@@ -80,7 +66,7 @@ export class StockService implements IStockService{
 
     }
 
-    async deleteStock(stock: StockEntity): Promise<boolean> {
+    async deleteStock(stock: Stock): Promise<boolean> {
         const deleteResponse = await this.stockRepository.delete(stock.id);
         if(deleteResponse.affected){return true;}
         throw new Error('Stock could not be found or deleted');
@@ -102,6 +88,33 @@ export class StockService implements IStockService{
             return true;
         }
         return false;
+    }
+
+    verifyStockEntity(stock: Stock): void{
+
+        if (stock.name.length < 2) {
+            throw new Error('Stock name must be more than 2 chars');
+        }
+
+        if (stock.name.length > 16) {
+            throw new Error('Stock name must be less than 16 chars');
+        }
+
+        if(stock.currentStockPrice < 0){
+            throw new Error('Stock price must be 0 or above')
+        }
+
+        if(stock.currentStockPrice > 99999){
+            throw new Error('Stock price must be under 99999')
+        }
+
+        if(stock.description.length < 1){
+            throw new Error('Stock description must be more than 0 chars');
+        }
+
+        if(stock.description.length > 600){
+            throw new Error('Stock description must be under 600 chars');
+        }
     }
 
 }

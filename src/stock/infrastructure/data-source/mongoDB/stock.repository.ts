@@ -26,29 +26,29 @@ export class StockRepository {
         const totalItems = await this.stockModel.find().countDocuments().exec()
         const result = await this.stockModel.find().limit(filter.itemsPrPage).
         skip((filter.currentPage - 1) * filter.itemsPrPage).sort({name: 'desc'}).exec()
-        let filterStock: FilterList<StockEntity> = {totalItems: totalItems, list: result}
+        let filterStock: FilterList<Stock> = {totalItems: totalItems, list: result}
         return filterStock;
     }
 
-    async getStockByName(name: String): Promise<StockEntity> {
+    async getStockByName(name: String): Promise<Stock> {
 
         const stockEntity: StockEntity = await this.stockModel.findOne({name: new RegExp('^'+name+'$', "i")}).exec()
         return stockEntity;
     }
 
-    async getStockByID(id: string): Promise<StockEntity> {
+    async getStockByID(id: string): Promise<Stock> {
 
-        const stockEntity: StockEntity = await this.stockModel.findOne({id: id}).exec()
-        return stockEntity;
+        const stock: Stock = await this.stockModel.findOne({id: id}).exec()
+        return stock;
     }
 
-    async updateStock(stock: StockEntity): Promise<boolean> {
+    async updateStock(stock: Stock): Promise<boolean> {
 
         await this.stockModel.updateOne({id: stock.id}, stock).exec()
         return true;
     }
 
-    async deleteStock(stock: StockEntity): Promise<boolean> {
+    async deleteStock(stock: Stock): Promise<boolean> {
 
         await this.stockModel.deleteOne({id: stock.id}).exec()
         return true;
