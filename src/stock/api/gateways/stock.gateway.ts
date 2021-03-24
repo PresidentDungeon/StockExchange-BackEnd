@@ -30,7 +30,7 @@ export class StockGateway {
         client.emit('createResponse', {created: true, errorMessage: ''});
       }
       catch (e){
-        client.emit('createResponse', {created: false, errorMessage: 'Error saving stock to database'})
+        client.emit('createResponse', {created: false, errorMessage: e.message})
       }
     }
   }

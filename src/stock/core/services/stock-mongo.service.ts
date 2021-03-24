@@ -1,12 +1,12 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {IStockService} from "../primary-ports/stock.service.interface";
-import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
 import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
 import {Model} from "mongoose";
 import {StockInterface} from "../../infrastructure/data-source/mongoDB/stockInterface";
 import {v4 as uuidv4} from 'uuid';
 import {Stock} from "../models/stock";
+import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
 
 @Injectable()
 export class StockMongoService implements IStockService {
@@ -14,6 +14,14 @@ export class StockMongoService implements IStockService {
     constructor(@Inject('STOCK_MODEL') private stockModel: Model<StockInterface>){}
 
     async createStock(stock: Stock): Promise<boolean> {
+
+        if (stock.name.length < 2) {
+            throw new Error('Stock name must be more then 2 chars');
+        }
+
+        if(stock.currentStockPrice < 0){
+            throw new Error('Stock price must be 0 or above')
+        }
 
         stock.id = uuidv4();
 

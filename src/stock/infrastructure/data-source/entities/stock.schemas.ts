@@ -2,9 +2,9 @@ import * as mongoose from 'mongoose';
 
 export const StockSchema = new mongoose.Schema({
     id: {type: String, required: true, unique: true},
-    name: String,
+    name: {type: String, unique: true, minlength: 2},
     description: String,
-    currentStockPrice: Number,
-    dailyStockPrice: Number,
+    currentStockPrice: {type: Number, min: 0},
+    dailyStockPrice: {type: Number, min: 0},
     dailyTimestamp: {type: Date},
 });

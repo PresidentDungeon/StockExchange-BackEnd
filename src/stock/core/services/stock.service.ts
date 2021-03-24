@@ -4,11 +4,11 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
-import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
 import {Document, Model} from "mongoose";
 import {StockInterface} from "../../infrastructure/data-source/mongoDB/stockInterface";
 import {Stock} from "../models/stock";
 import {v4 as uuidv4} from 'uuid';
+import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
 
 
 @Injectable()
@@ -20,6 +20,14 @@ export class StockService implements IStockService{
     ) {}
 
     async createStock(stock: Stock): Promise<boolean> {
+
+        if (stock.name.length < 2) {
+            throw new Error('Stock name must be more then 2 chars');
+        }
+
+        if(stock.currentStockPrice < 0){
+            throw new Error('Stock price must be 0 or above')
+        }
 
         stock.id = uuidv4();
 
