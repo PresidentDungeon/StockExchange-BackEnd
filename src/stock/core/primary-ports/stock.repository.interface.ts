@@ -2,8 +2,8 @@ import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
 import {Stock} from "../models/stock";
 
-export const IStockServiceProvider = 'IStockServiceProvider'
-export interface IStockService{
+export const IStockRepositoryProvider = 'IStockRepositoryProvider'
+export interface IStockRepository{
 
     getStock(filter: Filter): Promise<FilterList<Stock>>
     getStockByName(name: String): Promise<Stock>
@@ -12,5 +12,4 @@ export interface IStockService{
     updateStock(stock: Stock): Promise<boolean>
     deleteStock(stock: Stock): Promise<boolean>
     verifyStock(): Promise<boolean>
-    verifyStockEntity(stock: Stock): void
 }

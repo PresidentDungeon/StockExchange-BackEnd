@@ -6,9 +6,10 @@ import {Filter} from "../../../core/models/filter";
 import {FilterList} from "../../../core/models/filterList";
 import {StockEntity} from "../postgres/entities/stock.entity";
 import {v4 as uuidv4} from 'uuid';
+import {IStockRepository} from "../../../core/primary-ports/stock.repository.interface";
 
 @Injectable()
-export class StockRepository {
+export class StockRepository implements IStockRepository {
 
     constructor(@Inject('STOCK_MODEL') private stockModel: Model<StockInterface>){}
 

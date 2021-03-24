@@ -1,15 +1,15 @@
-import {Injectable} from '@nestjs/common';
-import {IStockService} from "../primary-ports/stock.service.interface";
+import {Inject, Injectable} from '@nestjs/common';
+import {IStockService, IStockServiceProvider} from "../primary-ports/stock.service.interface";
 import {Filter} from "../models/filter";
 import {FilterList} from "../models/filterList";
 import {Stock} from "../models/stock";
 import {StockEntity} from "../../infrastructure/data-source/postgres/entities/stock.entity";
-import {StockRepository} from "../../infrastructure/data-source/mongoDB/stock.repository";
+import {IStockRepository, IStockRepositoryProvider} from "../primary-ports/stock.repository.interface";
 
 @Injectable()
 export class StockMongoService implements IStockService {
 
-    constructor(private stockRepository: StockRepository){}
+    constructor(@Inject (IStockRepositoryProvider) private stockRepository: IStockRepository){}
 
     async createStock(stock: Stock): Promise<boolean> {
 
