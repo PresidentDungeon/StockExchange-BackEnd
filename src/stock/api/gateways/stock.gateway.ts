@@ -47,7 +47,7 @@ export class StockGateway {
         client.emit('updateResponse', {updated: true, errorMessage: '', stock: stock});
       }
       catch (e){
-        client.emit('updateResponse', {updated: false, errorMessage: 'Error updating stock in database'})
+        client.emit('updateResponse', {updated: false, errorMessage: e.message})
       }
     } else {
       client.emit('updateResponse', {updated: false, errorMessage: 'Stock could not be found in database'})

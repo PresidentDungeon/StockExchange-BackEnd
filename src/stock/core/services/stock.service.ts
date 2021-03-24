@@ -61,8 +61,23 @@ export class StockService implements IStockService{
     }
 
     async updateStock(stock: StockEntity): Promise<boolean> {
-        await this.stockRepository.update(stock.id, stock);
-        return true;
+
+        if (stock.name.length < 2) {
+            throw new Error('Stock name must be more then 2 chars');
+        }
+
+        if(stock.currentStockPrice < 0){
+            throw new Error('Stock price must be 0 or above')
+        }
+
+        try{
+            await this.stockRepository.update(stock.id, stock);
+            return true;
+        }
+        catch (e) {
+            throw new Error('Error updating stock in database');
+        }
+
     }
 
     async deleteStock(stock: StockEntity): Promise<boolean> {

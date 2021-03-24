@@ -4,9 +4,9 @@ export const databaseProviders = [
     {
         provide: 'DATABASE_CONNECTION',
         useFactory: (): Promise<typeof mongoose> =>
-            mongoose.connect('mongodb://localhost',{
+            mongoose.connect('mongodb://localhost/nest',{
                 useNewUrlParser: true,
-                useUnifiedTopology: true
+                useUnifiedTopology: true,
             })
     },
 ];

@@ -7,11 +7,12 @@ import {StockInterface} from "../../infrastructure/data-source/mongoDB/stockInte
 import {v4 as uuidv4} from 'uuid';
 import {Stock} from "../models/stock";
 import {StockEntity} from "../../infrastructure/data-source/entities/stock.entity";
+import {StockRepository} from "../../infrastructure/data-source/mongoDB/stock.repository";
 
 @Injectable()
 export class StockMongoService implements IStockService {
 
-    constructor(@Inject('STOCK_MODEL') private stockModel: Model<StockInterface>){}
+    constructor(private stockRepository: StockRepository){}
 
     async createStock(stock: Stock): Promise<boolean> {
 
@@ -23,54 +24,41 @@ export class StockMongoService implements IStockService {
             throw new Error('Stock price must be 0 or above')
         }
 
-        stock.id = uuidv4();
-
-        const createdStock = new this.stockModel(stock);
-        await createdStock.save()
-        return new Promise(resolve => {resolve(true);});
+        try{return this.stockRepository.createStock(stock);}
+        catch (e) {throw new Error('Error saving data to database');}
     }
 
     async getStock(filter: Filter): Promise<FilterList<Stock>> {
-
-        const totalItems = await this.stockModel.find().countDocuments().exec()
-        const result = await this.stockModel.find().limit(filter.itemsPrPage).
-        skip((filter.currentPage - 1) * filter.itemsPrPage).sort({name: 'desc'}).exec()
-        let stock: FilterList<StockEntity> = {totalItems: totalItems, list: result}
-        return stock;
+        return this.stockRepository.getStock(filter);
     }
 
     async getStockByName(name: String): Promise<StockEntity> {
-
-        const stockEntity: StockEntity = await this.stockModel.findOne({name: new RegExp('^'+name+'$', "i")}).exec()
-        return stockEntity;
+        return this.stockRepository.getStockByName(name);
     }
 
     async getStockByID(id: string): Promise<StockEntity> {
-
-        const stockEntity: StockEntity = await this.stockModel.findOne({id: id}).exec()
-        return stockEntity;
+        return this.stockRepository.getStockByID(id);
     }
 
     async updateStock(stock: StockEntity): Promise<boolean> {
 
-        await this.stockModel.updateOne({id: stock.id}, stock).exec()
-        return true;
+        if (stock.name.length < 2) {
+            throw new Error('Stock name must be more then 2 chars');
+        }
+
+        if(stock.currentStockPrice < 0){
+            throw new Error('Stock price must be 0 or above')
+        }
+
+        try{return this.stockRepository.updateStock(stock);}
+        catch (e) {throw new Error('Error updating stock in database');}
     }
 
     async deleteStock(stock: StockEntity): Promise<boolean> {
-
-        await this.stockModel.deleteOne({id: stock.id}).exec()
-        return true;
+        return this.stockRepository.deleteStock(stock);
     }
 
     async verifyStock(): Promise<boolean> {
-
-        const date: Date = new Date()
-        date.setHours(0); date.setMinutes(0); date.setSeconds(0); date.setMilliseconds(0);
-
-        let stocks = await this.stockModel.find({ dailyTimestamp: {$lt: date}}).exec()
-        stocks.forEach((stock) => {stock.dailyStockPrice = stock.currentStockPrice; stock.dailyTimestamp = new Date(); this.updateStock(stock);})
-
-        return stocks.length > 0
+        return this.stockRepository.verifyStock();
     }
 }
