@@ -12,7 +12,7 @@ import {StockRepository} from "../infrastructure/data-source/mongoDB/stock.repos
 
 @Module({
     imports: [TypeOrmModule.forFeature([StockEntity]), DatabaseMongoModule],
-    providers: [StockGateway, {provide: IStockServiceProvider, useClass: StockMongoService}, ...stocksProviders, StockRepository],
+    providers: [StockGateway, {provide: IStockServiceProvider, useClass: StockService}, ...stocksProviders, StockRepository],
     exports: [IStockServiceProvider],
     controllers: [StockController]
 })

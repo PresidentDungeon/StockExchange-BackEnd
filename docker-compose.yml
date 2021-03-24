@@ -1,5 +1,25 @@
 version: "3"
+  
 services:
+
+  mongo:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+    - 27017:27017
+    volumes:
+    - /data/db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8082:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+    
   postgres:
     container_name: postgres_stockExchange
     image: postgres:latest
@@ -29,27 +49,6 @@ services:
 networks:
   postgres:
     driver: bridge
-    
-    
-services:
-
-  mongo:
-    image: mongo
-    container_name: mongodb
-    restart: always
-    ports:
-    - 27017:27017
-    volumes:
-    - mongodb_data_container:/data/db
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8082:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
 
 volumes:
   mongodb_data_container:
